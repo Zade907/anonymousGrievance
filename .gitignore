@@ -1,0 +1,13 @@
+# Virtual environment
+env/
+
+# Environment variables
+.env
+googleApi.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Django stuff
+db.sqlite3
