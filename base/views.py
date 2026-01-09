@@ -17,12 +17,12 @@ def create_grievances(request):
         )
 
     grievance = {
-        'title': data.get('title'),
+        'category': data.get('category'),
         'description': data.get('description'),
         'location' : data.get('location',{}),
         'status' : 'Submitted',
         'flagged': False,
-        'created_at': datetime.datetime.now(),
+        'created_at': datetime.now(),
     }
 
     grievances_collection.insert_one(grievance)
