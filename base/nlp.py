@@ -33,3 +33,12 @@ def google_entity_check(text):
         })
 
     return entities
+
+def is_sensitive_google(text):
+    entity = google_entity_check(text)
+
+    for e in entity:
+        if e['type'] in ['PERSON', 'ORGANIZATION'] and e['salience'] > 0.35:
+            return True,e["name"]
+        
+    return False,None
