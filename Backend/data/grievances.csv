@@ -113,4 +113,9 @@ text,label
 "Corrupt officials taking bribes for permits",safe
 "Fake charity organizations collecting money",safe
 "Fake job offers being circulated",safe
-"Call 1800-222-333 for job application",sensitive
+"Call 1800-222-333 for job application",sensitive\
+"Shreyas Upadhye 9873021234 is looking for a job",sensitive
+"9871023987 is my contact number",sensitive
+"87694289384 is the number to reach me",sensitive
+'Contact 9988776655 for more details',sensitive
+"Ruchir Kalokhe email is ruchir.kalokhe@gmail.com",sensitive
