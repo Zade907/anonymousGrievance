@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 
-load_dotenv(dotenv_path=Path('.') / 'googleApi.env')
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=BASE_DIR / "googleApi.env")
+
 
 client = language_v1.LanguageServiceClient()
 
