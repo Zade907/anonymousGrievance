@@ -18,8 +18,6 @@ import uuid
 @api_view(['POST', 'GET'])
 @parser_classes([MultiPartParser, FormParser])
 def create_grievances(request):
-    print("FILES:", request.FILES)
-
     if request.method == 'GET':
         filters = {}
 

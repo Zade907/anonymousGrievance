@@ -1,15 +1,12 @@
-import GrievanceForm from "./GrievanceForm"
+import FilterPanel from "./FilterPanel"
 import GrievanceFeed from "./GrievanceFeed"
-import FilterPanel from "./FilterPanel.jsx"
 
 export default function App() {
   return (
-    <div style={{display: "flex", height : "100vh"}}>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 3fr", height: "100vh", fontFamily: "sans-serif" }}>
       <FilterPanel />
-      <div style={{flex: 1, display: "flex", padding: "20px"}}>
-        <GrievanceForm />
-        <GrievanceFeed />
-      </div>
+      <GrievanceFeed />
     </div>
   )
 }
+
