@@ -1,4 +1,4 @@
-📘 Civic Shield README (copy everything)
+📘 Civic Shield README 
 # 🛡️ Civic Shield
 
 An AI-powered anonymous grievance platform designed to enable citizens to report issues securely and efficiently.
