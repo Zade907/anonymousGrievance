@@ -6,11 +6,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-# Load env variables from local googleApi.env if it exists
-load_dotenv(dotenv_path=BASE_DIR / "googleApi.env")
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load env variables from local googleApi.env if it exists
+load_dotenv(dotenv_path=BASE_DIR / "googleApi.env")
 
 # ── Write Credentials from Env Vars at Runtime (For Cloud Deploys) ───
 _google_creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
