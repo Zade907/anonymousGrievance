@@ -1,71 +1,132 @@
-import { useEffect, useState } from "react";
-import GrievanceForm from "./GrievanceForm";
+import { useEffect, useState } from "react"
+import GrievanceForm from "./GrievanceForm"
+
+function getCategoryBadgeClass(category = "") {
+  const cat = category.toLowerCase()
+  if (cat.includes("infra") || cat.includes("pothole") || cat.includes("road")) return "feed-card__badge--infrastructure"
+  if (cat.includes("govern") || cat.includes("bribery") || cat.includes("corrupt")) return "feed-card__badge--governance"
+  if (cat.includes("sanit") || cat.includes("garbage") || cat.includes("drain")) return "feed-card__badge--sanitation"
+  if (cat.includes("secur") || cat.includes("light") || cat.includes("safety")) return "feed-card__badge--security"
+  return "feed-card__badge--other"
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return ""
+  try {
+    const d = new Date(dateStr)
+    const diff = Math.floor((Date.now() - d) / 60000)
+    if (diff < 60) return `${diff || 1} min ago`
+    if (diff < 1440) return `${Math.floor(diff / 60)} hr ago`
+    return d.toLocaleDateString()
+  } catch {
+    return ""
+  }
+}
 
 export default function GrievanceFeed() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([])
 
   function load(filters = "") {
     fetch("http://127.0.0.1:8000/api/grievances/?" + filters)
-      .then((res) => res.json())
-      .then(setData);
+      .then(res => res.json())
+      .then(setData)
+      .catch(() => setData([]))
   }
 
   useEffect(() => {
-    load();
-
-    window.addEventListener("filters", (e) => {
-      load(e.detail);
-    });
-  }, []);
+    load()
+    const handler = e => load(e.detail)
+    window.addEventListener("filters", handler)
+    return () => window.removeEventListener("filters", handler)
+  }, [])
 
   return (
-    <div
-      style={{
-        flex: 1,
-        background: "#f4f4f41a",
-        padding: "20px",
-        overflowY: "auto",
-      }}
-    >
+    <>
+      {/* Report Form */}
       <GrievanceForm onSubmit={() => load()} />
 
-      <h2>Live Grievance Feed</h2>
+      {/* Feed */}
+      <section>
+        <h3 className="feed-section__title">Live Grievance Feed</h3>
 
-      {data.map((g, i) => (
-        <div
-          key={i}
-          style={{
-            background: "#ffffff16",
-            padding: "15px",
-            marginBottom: "15px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-          }}
-        >
-          <h4 style={{ margin: 0 }}>Category: {g.category}</h4>
+        <div className="feed-grid">
+          {data.length === 0 ? (
+            <div className="feed-empty">
+              <span className="material-symbols-outlined" style={{ fontSize: 48, display: "block", marginBottom: 12, color: "var(--color-outline)" }}>inbox</span>
+              No grievances found. Be the first to report an issue.
+            </div>
+          ) : (
+            data.map((g, i) => (
+              <div key={i} className="feed-card">
+                <div className="feed-card__body">
 
-          <p>Description: {g.description}</p>
+                  {/* Header: badge + meta */}
+                  <div className="feed-card__header">
+                    <span className={`feed-card__badge ${getCategoryBadgeClass(g.category)}`}>
+                      {g.category}
+                    </span>
+                    <span className="feed-card__meta">
+                      {formatDate(g.created_at)}
+                      {g.location?.city ? ` • ${g.location.city}` : ""}
+                    </span>
+                  </div>
 
-          {g.image_url && (
-            <img
-              src={g.image_url}
-              style={{ maxWidth: "300px", borderRadius: "6px" }}
-            />
+                  {/* Description */}
+                  <p className="feed-card__description">{g.description}</p>
+
+                  {/* Image */}
+                  {g.image_url && (
+                    <div className="feed-card__image-wrap">
+                      <img
+                        src={g.image_url}
+                        alt="Grievance photo"
+                        className="feed-card__image"
+                      />
+                    </div>
+                  )}
+
+                  {/* Location */}
+                  {g.location && (
+                    <div className="feed-card__location">
+                      {g.location.route && (
+                        <span className="feed-card__location-item">
+                          <span className="material-symbols-outlined">route</span>
+                          {g.location.route}
+                        </span>
+                      )}
+                      {g.location.neighborhood && (
+                        <span className="feed-card__location-item">
+                          <span className="material-symbols-outlined">location_city</span>
+                          {g.location.neighborhood}
+                        </span>
+                      )}
+                      {g.location.sublocality && !g.location.neighborhood && (
+                        <span className="feed-card__location-item">
+                          <span className="material-symbols-outlined">location_city</span>
+                          {g.location.sublocality}
+                        </span>
+                      )}
+                      {g.location.city && (
+                        <span className="feed-card__location-item">
+                          <span className="material-symbols-outlined">apartment</span>
+                          {g.location.city}
+                        </span>
+                      )}
+                      {g.location.postal_code && (
+                        <span className="feed-card__location-item">
+                          <span className="material-symbols-outlined">pin_drop</span>
+                          {g.location.postal_code}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                </div>
+              </div>
+            ))
           )}
-
-          <div
-            style={{ marginTop: "10px", fontSize: "14px", color: "#ffffff" }}
-          >
-            <strong>Location</strong>
-            <div>Route: {g.location?.route}</div>
-            <div>Neighbourhood: {g.location?.neighborhood}</div>
-            <div>Sublocality: {g.location?.sublocality}</div>
-            <div>Locality: {g.location?.locality}</div>
-            <div>City: {g.location?.city}</div>
-            <div>Postal Code: {g.location?.postal_code}</div>
-          </div>
         </div>
-      ))}
-    </div>
-  );
+      </section>
+    </>
+  )
 }
