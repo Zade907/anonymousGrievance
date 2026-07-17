@@ -29,22 +29,7 @@ export default function App() {
           </nav>
 
           {/* Actions */}
-          <div className="top-nav__actions">
-            <button className="icon-btn" aria-label="Notifications">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
-            <button className="icon-btn" aria-label="Account">
-              <span className="material-symbols-outlined">account_circle</span>
-            </button>
-            {/* Hamburger – visible only on ≤1024px */}
-            <button
-              className="hamburger-btn"
-              aria-label="Open filters"
-              onClick={() => setSidebarOpen(v => !v)}
-            >
-              <span className="material-symbols-outlined">menu</span>
-            </button>
-          </div>
+
 
         </div>
       </header>
@@ -81,7 +66,7 @@ export default function App() {
             <a href="#" className="site-footer__link">Contact Admin</a>
           </nav>
           <div className="site-footer__copy">
-            © 2024 Civic Shield. Secure, Anonymous, Impactful.
+            © 2026 Civic Shield. Secure, Anonymous, Impactful.
           </div>
         </div>
       </footer>
