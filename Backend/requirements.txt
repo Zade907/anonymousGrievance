@@ -1,0 +1,25 @@
+# Django & REST Framework
+Django==5.2.9
+djangorestframework
+django-extensions
+django-cors-headers
+
+# Environment variables
+python-dotenv
+
+# Database
+pymongo
+
+# Google Cloud
+google-cloud-language
+
+# Firebase
+firebase-admin
+
+# Machine Learning
+scikit-learn
+joblib
+pandas
+
+# HTTP requests
+requests
