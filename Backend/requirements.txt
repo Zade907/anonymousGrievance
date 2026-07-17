@@ -4,6 +4,11 @@ djangorestframework
 django-extensions
 django-cors-headers
 
+# Production server & static files
+gunicorn
+whitenoise
+
+
 # Environment variables
 python-dotenv
 

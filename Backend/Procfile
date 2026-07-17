@@ -1,0 +1,1 @@
+web: gunicorn anonymousGrievance.wsgi --log-file -
