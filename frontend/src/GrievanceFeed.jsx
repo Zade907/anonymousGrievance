@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react"
-import GrievanceForm from "./GrievanceForm"
+import { useEffect, useState } from "react";
+import GrievanceForm from "./GrievanceForm";
 
 export default function GrievanceFeed() {
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
 
   function load(filters = "") {
     fetch("http://127.0.0.1:8000/api/grievances/?" + filters)
-      .then(res => res.json())
-      .then(setData)
+      .then((res) => res.json())
+      .then(setData);
   }
 
   useEffect(() => {
-    load()
+    load();
 
-    window.addEventListener("filters", e => {
-      load(e.detail)
-    })
-  }, [])
+    window.addEventListener("filters", (e) => {
+      load(e.detail);
+    });
+  }, []);
 
   return (
     <div
@@ -24,14 +24,12 @@ export default function GrievanceFeed() {
         flex: 1,
         background: "#f4f4f41a",
         padding: "20px",
-        overflowY: "auto"
+        overflowY: "auto",
       }}
     >
-      
-
       <GrievanceForm onSubmit={() => load()} />
 
-      <h2>LIVE GRIEVANCE FEED</h2>
+      <h2>Live Grievance Feed</h2>
 
       {data.map((g, i) => (
         <div
@@ -41,7 +39,7 @@ export default function GrievanceFeed() {
             padding: "15px",
             marginBottom: "15px",
             borderRadius: "8px",
-            boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
+            boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
           }}
         >
           <h4 style={{ margin: 0 }}>Category: {g.category}</h4>
@@ -55,7 +53,9 @@ export default function GrievanceFeed() {
             />
           )}
 
-          <div style={{ marginTop: "10px", fontSize: "14px", color: "#ffffff" }}>
+          <div
+            style={{ marginTop: "10px", fontSize: "14px", color: "#ffffff" }}
+          >
             <strong>Location</strong>
             <div>Route: {g.location?.route}</div>
             <div>Neighbourhood: {g.location?.neighborhood}</div>
@@ -67,5 +67,5 @@ export default function GrievanceFeed() {
         </div>
       ))}
     </div>
-  )
+  );
 }
