@@ -39,8 +39,13 @@ ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS", "")
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS_ENV.split(",") if h.strip()]
 else:
-    # Include the Render domain explicitly; "*" still covers local development
-    ALLOWED_HOSTS = ["anonymousgrievance.onrender.com", "*"]
+    # Wildcard subdomain match covers all *.onrender.com internal addresses
+    ALLOWED_HOSTS = [".onrender.com", "anonymousgrievance.onrender.com", "localhost", "*"]
+
+# Always allow Render's internal proxy / health-checker addresses
+for _internal_host in ["127.0.0.1", "localhost", "anonymousgrievance.onrender.com"]:
+    if _internal_host not in ALLOWED_HOSTS and "*" not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_internal_host)
 
 # ── Application definition ───────────────────────────────────────────
 INSTALLED_APPS = [
