@@ -42,9 +42,11 @@ export default function GrievanceForm({ onSubmit }) {
     form.append("longitude", lng)
     if (image) form.append("image", image)
 
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
     setSubmitting(true)
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/grievances/", {
+      const res = await fetch(`${API_BASE_URL}/api/grievances/`, {
         method: "POST",
         body: form,
       })

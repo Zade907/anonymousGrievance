@@ -31,8 +31,10 @@ function formatDate(dateStr) {
 export default function GrievanceFeed() {
   const [data, setData] = useState([])
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
   function load(filters = "") {
-    fetch("http://127.0.0.1:8000/api/grievances/?" + filters)
+    fetch(`${API_BASE_URL}/api/grievances/?${filters}`)
       .then(res => res.json())
       .then(setData)
       .catch(() => setData([]))
