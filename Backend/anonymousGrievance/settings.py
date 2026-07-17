@@ -69,7 +69,15 @@ ROOT_URLCONF = 'anonymousGrievance.urls'
 # ── CORS Config ──────────────────────────────────────────────────────
 _cors_origins = os.getenv("CORS_ALLOWED_ORIGINS", "")
 if _cors_origins:
-    CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins.split(",") if o.strip()]
+    # django-cors-headers requires origins to be strictly scheme + host (no trailing slash or path)
+    CORS_ALLOWED_ORIGINS = []
+    for o in _cors_origins.split(","):
+        origin = o.strip()
+        if origin:
+            # strip trailing slash if present
+            if origin.endswith("/"):
+                origin = origin[:-1]
+            CORS_ALLOWED_ORIGINS.append(origin)
 else:
     CORS_ALLOW_ALL_ORIGINS = True
 
