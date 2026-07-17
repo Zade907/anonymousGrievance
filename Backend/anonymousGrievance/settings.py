@@ -23,7 +23,10 @@ if _firebase_creds_json:
     _firebase_path = BASE_DIR / "firebase_key.json"
     _firebase_path.write_text(_firebase_creds_json)
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(BASE_DIR / "google_key.json")
+# Only set the credentials path when the file actually exists
+_google_key_path = BASE_DIR / "google_key.json"
+if _google_key_path.exists():
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = str(_google_key_path)
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
@@ -36,7 +39,8 @@ ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS", "")
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS_ENV.split(",") if h.strip()]
 else:
-    ALLOWED_HOSTS = ["*"]
+    # Include the Render domain explicitly; "*" still covers local development
+    ALLOWED_HOSTS = ["anonymousgrievance.onrender.com", "*"]
 
 # ── Application definition ───────────────────────────────────────────
 INSTALLED_APPS = [
@@ -79,7 +83,11 @@ if _cors_origins:
                 origin = origin[:-1]
             CORS_ALLOWED_ORIGINS.append(origin)
 else:
-    CORS_ALLOW_ALL_ORIGINS = True
+    # Explicitly whitelist Vercel frontend; keep ALLOW_ALL for local dev fallback
+    CORS_ALLOWED_ORIGINS = [
+        "https://civic-shield-kappa.vercel.app",
+    ]
+    CORS_ALLOW_ALL_ORIGINS = False
 
 TEMPLATES = [
     {
