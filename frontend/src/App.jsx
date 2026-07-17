@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Analytics } from "@vercel/analytics/react"
 import FilterPanel from "./FilterPanel"
 import GrievanceFeed from "./GrievanceFeed"
 import "./App.css"
@@ -71,6 +72,7 @@ export default function App() {
         </div>
       </footer>
 
+      <Analytics />
     </div>
   )
 }
