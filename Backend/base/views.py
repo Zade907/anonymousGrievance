@@ -25,6 +25,8 @@ def create_grievances(request):
         category = request.GET.get('category')
         postal_code = request.GET.get('postal_code')
         status_filter = request.GET.get('status')
+        date_str = request.GET.get('date')  # Format: YYYY-MM-DD
+        sort_order = request.GET.get('sort', 'latest')
 
         if city:
             filters['location.city'] = city
@@ -34,8 +36,27 @@ def create_grievances(request):
             filters['location.postal_code'] = postal_code
         if status_filter:
             filters['status'] = status_filter
+        
+        if date_str:
+            try:
+                # Parse date and match complaints created on that day
+                day_start = datetime.strptime(date_str, "%Y-%m-%d")
+                from datetime import timedelta
+                day_end = day_start + timedelta(days=1)
+                filters['created_at'] = {
+                    "$gte": day_start,
+                    "$lt": day_end
+                }
+            except ValueError:
+                pass
 
-        grievances = list(grievances_collection.find(filters, {'_id': 0}))
+        # Determine sort ordering
+        # default to latest (created_at desc)
+        sort_field = [("created_at", -1)]
+        if sort_order == 'oldest':
+            sort_field = [("created_at", 1)]
+
+        grievances = list(grievances_collection.find(filters, {'_id': 0}).sort(sort_field))
         return Response(grievances)
 
     data = request.data

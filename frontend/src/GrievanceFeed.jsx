@@ -17,7 +17,12 @@ function formatDate(dateStr) {
     const diff = Math.floor((Date.now() - d) / 60000)
     if (diff < 60) return `${diff || 1} min ago`
     if (diff < 1440) return `${Math.floor(diff / 60)} hr ago`
-    return d.toLocaleDateString()
+    
+    // Explicitly format as DD/MM/YYYY
+    const day = String(d.getDate()).padStart(2, '0')
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const year = d.getFullYear()
+    return `${day}/${month}/${year}`
   } catch {
     return ""
   }

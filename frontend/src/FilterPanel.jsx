@@ -4,12 +4,16 @@ export default function FilterPanel({ onClose }) {
   const [city, setCity] = useState("")
   const [category, setCategory] = useState("")
   const [postalCode, setPostalCode] = useState("")
+  const [date, setDate] = useState("")
+  const [sort, setSort] = useState("latest")
 
   function apply() {
     const params = new URLSearchParams()
     if (city) params.append("city", city)
     if (category) params.append("category", category)
     if (postalCode) params.append("postal_code", postalCode)
+    if (date) params.append("date", date)
+    if (sort) params.append("sort", sort)
 
     window.dispatchEvent(
       new CustomEvent("filters", { detail: params.toString() })
@@ -22,7 +26,9 @@ export default function FilterPanel({ onClose }) {
     setCity("")
     setCategory("")
     setPostalCode("")
-    window.dispatchEvent(new CustomEvent("filters", { detail: "" }))
+    setDate("")
+    setSort("latest")
+    window.dispatchEvent(new CustomEvent("filters", { detail: "sort=latest" }))
     if (onClose) onClose()
   }
 
@@ -79,6 +85,45 @@ export default function FilterPanel({ onClose }) {
             value={postalCode}
             onChange={e => setPostalCode(e.target.value)}
           />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="filter-date">Date</label>
+          <input
+            id="filter-date"
+            className="form-control"
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group" style={{ marginTop: "8px", borderTop: "1px solid var(--color-outline-variant)", paddingTop: "12px" }}>
+          <div className="sidebar__title-row" style={{ marginBottom: "8px" }}>
+            <span className="material-symbols-outlined sidebar__title-icon" style={{ fontSize: "18px" }}>sort</span>
+            <label className="form-label" htmlFor="filter-sort" style={{ margin: 0 }}>Sort By</label>
+          </div>
+          <select
+            id="filter-sort"
+            className="form-control"
+            value={sort}
+            onChange={e => {
+              setSort(e.target.value)
+              // Dynamically apply sorting change on change
+              const params = new URLSearchParams()
+              if (city) params.append("city", city)
+              if (category) params.append("category", category)
+              if (postalCode) params.append("postal_code", postalCode)
+              if (date) params.append("date", date)
+              params.append("sort", e.target.value)
+              window.dispatchEvent(
+                new CustomEvent("filters", { detail: params.toString() })
+              )
+            }}
+          >
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+          </select>
         </div>
 
         <button
