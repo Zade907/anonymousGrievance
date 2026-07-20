@@ -88,9 +88,11 @@ if _cors_origins:
                 origin = origin[:-1]
             CORS_ALLOWED_ORIGINS.append(origin)
 else:
-    # Explicitly whitelist Vercel frontend; keep ALLOW_ALL for local dev fallback
+    # Explicitly whitelist the deployed frontend and local Vite dev servers.
     CORS_ALLOWED_ORIGINS = [
         "https://civic-shield-kappa.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
     ]
     CORS_ALLOW_ALL_ORIGINS = False
 
